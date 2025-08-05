@@ -1,0 +1,2559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEPE BROS - The Ultimate PulseChain Adventure</title>
+    <meta name="description" content="Join the Pepe Bros adventure on PulseChain! A Nintendo-inspired meme token bringing retro gaming vibes to DeFi.">
+    <meta name="keywords" content="Pepe Bros, PulseChain, meme token, Nintendo, Mario, DeFi, crypto, blockchain">
+    <meta property="og:title" content="PEPE BROS - The Ultimate PulseChain Adventure">
+    <meta property="og:description" content="Join the Pepe Bros adventure on PulseChain! A Nintendo-inspired meme token bringing retro gaming vibes to DeFi.">
+    <meta property="og:type" content="website">
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+.hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(to top, #74c7d3, #a2e0f0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.hero-bg .layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: repeat-x;
+  background-size: cover;
+  animation: scroll 60s linear infinite;
+  z-index: 0;
+}
+
+.layer.sky {
+  background-image: url('sky-layer.png');
+  z-index: 1;
+}
+.layer.mountains {
+  background-image: url('mountains-layer.png');
+  z-index: 2;
+}
+.layer.hills {
+  background-image: url('hills-layer.png');
+  z-index: 3;
+}
+.layer.ground {
+  background-image: url('ground-layer.png');
+  z-index: 4;
+}
+
+@keyframes scroll {
+  from { background-position: 0 0; }
+  to { background-position: -10000px 0; }
+}
+
+.floating-element,
+.block,
+.character {
+  position: absolute;
+  z-index: 5;
+}
+
+.floating-element.coin {
+  width: 24px;
+  height: 24px;
+  background: url('coin.png') no-repeat center/cover;
+  animation: float 2s ease-in-out infinite alternate;
+}
+
+.floating-element.star {
+  width: 28px;
+  height: 28px;
+  background: url('star.png') no-repeat center/cover;
+  animation: float 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-15px); }
+}
+
+.block {
+  width: 32px;
+  height: 32px;
+  background: url('block.png') no-repeat center/cover;
+  cursor: pointer;
+}
+
+.block.mystery {
+  background-image: url('mystery.png');
+}
+
+.title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 2.5rem;
+  color: #fff;
+  text-shadow: 4px 4px #000;
+  z-index: 6;
+  margin-bottom: 20px;
+}
+
+.hero-buttons {
+  z-index: 6;
+  display: flex;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.mario-btn {
+  font-family: 'Press Start 2P', cursive;
+  padding: 12px 20px;
+  background: yellow;
+  border: 3px solid #000;
+  border-radius: 5px;
+  color: #000;
+  box-shadow: 3px 3px #333;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.mario-btn:hover {
+  transform: translateY(-4px);
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.logo {
+    width: 50px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.rotating-logo {
+    animation: spinLogo 8s linear infinite;
+}
+
+@keyframes spinLogo {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.mario-btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.65rem;
+    padding: 10px 14px;
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    color: #000;
+    border: 3px solid #000;
+    border-radius: 6px;
+    box-shadow: 4px 4px 0px #333;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.mario-btn:hover {
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 6px 6px 0px #000;
+    background: linear-gradient(90deg, #FFA500, #FFD700);
+}
+
+
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFYSURBVCiRpZM9SwNBEIafgwQLwcJCG1sLwcJCG1sLwcJCG1sLwcJCG1sLwcJCG1sLwcJCG1sLwcJCG1sLwcJCG9vYiFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhY='), auto;
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .logo {
+            width: 60px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FFEAA7);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .title {
+            font-size: clamp(2rem, 8vw, 6rem);
+            color: #fff;
+            text-shadow: 4px 4px 0px #000, 8px 8px 0px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 10;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            transition: transform 0.1s ease-out;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .coin {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #FFD700, #FFA500);
+            border-radius: 50%;
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.3);
+            animation: spin 2s linear infinite, float 3s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+        
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            padding: 80px 20px;
+            position: relative;
+            background-attachment: fixed;
+        }
+        
+        .mission-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .buy-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .gallery-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            text-align: center;
+            margin-bottom: 50px;
+            color: #fff;
+            text-shadow: 2px 2px 0px #000;
+        }
+        
+        .mission-text {
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            line-height: 2;
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #fff;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* How to Buy Steps */
+        .buy-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .step {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #fff;
+            text-align: center;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .step:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #FFD700;
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+        }
+        
+        .gallery-item {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            border: 3px solid #fff;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.2);
+        }
+        
+        /* Special Animation Section */
+        .animation-section {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            text-align: center;
+            padding: 100px 20px;
+        }
+        
+        .gif-container {
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .gif-container img {
+            width: 100%;
+            height: auto;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #000;
+            color: #fff;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        
+        .footer-logo {
+            width: 80px;
+            height: auto;
+            margin: 0 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-logo:hover {
+            transform: scale(1.2);
+        }
+        
+        /* Interactive Elements */
+        .block {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+            border: 3px solid #000;
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .block:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        
+        .block.hit {
+            animation: blockHit 0.5s ease;
+        }
+        
+        @keyframes blockHit {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2) translateY(-10px); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Character Elements */
+        .character {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .character img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .character:hover {
+            transform: scale(1.2) bounce;
+            animation: characterBounce 0.5s ease;
+        }
+        
+        @keyframes characterBounce {
+            0%, 100% { transform: scale(1.2) translateY(0); }
+            50% { transform: scale(1.2) translateY(-20px); }
+        }
+        
+        /* Power-up Effect */
+        .power-up {
+            position: fixed;
+            font-size: 2rem;
+            color: #FFD700;
+            text-shadow: 2px 2px 0px #000;
+            pointer-events: none;
+            z-index: 9999;
+            animation: powerUpFloat 2s ease-out forwards;
+        }
+        
+        @keyframes powerUpFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-20px) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-60px) scale(1);
+            }
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 3rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .mission-text {
+                font-size: 1rem;
+                padding: 20px;
+            }
+            
+            .step {
+                padding: 20px;
+            }
+            
+            .character {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .block {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            color: #fff;
+            font-size: 2rem;
+        }
+        
+        .loading-text {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+.mario-btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.65rem;
+    padding: 10px 14px;
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    color: #000;
+    border: 3px solid #000;
+    border-radius: 6px;
+    box-shadow: 4px 4px 0px #333;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.mario-btn:hover {
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 6px 6px 0px #000;
+    background: linear-gradient(90deg, #FFA500, #FFD700);
+}
+
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D4EA 30%, #87CEEB 60%, #228B22 100%);
+            cursor: crosshair;
+        }
+        
+        /* Background Layers */
+        .bg-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat-x;
+            background-size: auto 100%;
+        }
+        
+        .mountains {
+            bottom: 0;
+            height: 40%;
+            background: linear-gradient(45deg, #4a5568 0%, #2d3748 50%, #4a5568 100%);
+            clip-path: polygon(0 100%, 15% 60%, 25% 80%, 40% 40%, 55% 70%, 70% 30%, 85% 65%, 100% 45%, 100% 100%);
+            animation: parallax-slow 60s linear infinite;
+        }
+        
+        .clouds {
+            top: 10%;
+            height: 30%;
+            animation: parallax-medium 40s linear infinite;
+        }
+        
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50px;
+            opacity: 0.8;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .cloud:before,
+        .cloud:after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50px;
+        }
+        
+        .cloud1 {
+            width: 80px;
+            height: 40px;
+            top: 20px;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .cloud1:before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 10px;
+        }
+        
+        .cloud1:after {
+            width: 60px;
+            height: 30px;
+            top: -15px;
+            right: 10px;
+        }
+        
+        .cloud2 {
+            width: 60px;
+            height: 30px;
+            top: 50px;
+            right: 20%;
+            animation-delay: -2s;
+        }
+        
+        .cloud2:before {
+            width: 40px;
+            height: 40px;
+            top: -20px;
+            left: 8px;
+        }
+        
+        .cloud2:after {
+            width: 50px;
+            height: 25px;
+            top: -10px;
+            right: 8px;
+        }
+        
+        .cloud3 {
+            width: 70px;
+            height: 35px;
+            top: 10px;
+            left: 60%;
+            animation-delay: -4s;
+        }
+        
+        .cloud3:before {
+            width: 45px;
+            height: 45px;
+            top: -22px;
+            left: 12px;
+        }
+        
+        .cloud3:after {
+            width: 55px;
+            height: 28px;
+            top: -12px;
+            right: 12px;
+        }
+        
+        /* Pipes */
+        .pipe {
+            position: absolute;
+            width: 60px;
+            background: linear-gradient(90deg, #228B22 0%, #32CD32 50%, #228B22 100%);
+            border: 3px solid #000;
+            border-radius: 8px 8px 0 0;
+            animation: pipe-bounce 4s ease-in-out infinite;
+        }
+        
+        .pipe1 {
+            height: 150px;
+            bottom: 0;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        
+        .pipe2 {
+            height: 200px;
+            bottom: 0;
+            right: 10%;
+            animation-delay: -2s;
+        }
+        
+        .pipe:before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -8px;
+            width: 76px;
+            height: 30px;
+            background: linear-gradient(90deg, #228B22 0%, #32CD32 50%, #228B22 100%);
+            border: 3px solid #000;
+            border-radius: 15px;
+        }
+        
+        /* Main Title */
+        .title {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(2rem, 8vw, 4rem);
+            color: #FFD700;
+            text-shadow: 
+                3px 3px 0 #FF6B35,
+                6px 6px 0 #FF0000,
+                9px 9px 0 #000000,
+                12px 12px 20px rgba(0,0,0,0.5);
+            animation: title-entrance 3s ease-out forwards, title-glow 2s ease-in-out infinite alternate;
+            z-index: 100;
+            letter-spacing: 4px;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 90;
+        }
+        
+        .game-button {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.6rem, 2vw, 1rem);
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            border: 4px solid #000;
+            border-radius: 12px;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: button-pulse 2s ease-in-out infinite;
+        }
+        
+        .game-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #FFE55C 0%, #FFB84D 50%, #FF9500 100%);
+        }
+        
+        .game-button:active {
+            transform: translateY(-2px);
+            animation: button-hit 0.2s ease;
+        }
+        
+        .game-button.start-btn {
+            background: linear-gradient(45deg, #32CD32 0%, #228B22 50%, #006400 100%);
+            color: white;
+        }
+        
+        .game-button.trailer-btn {
+            background: linear-gradient(45deg, #FF6B35 0%, #FF4500 50%, #DC143C 100%);
+            color: white;
+        }
+        
+        /* Enhanced Floating Elements */
+        .floating-element {
+            position: absolute;
+            z-index: 50;
+        }
+        
+        .coin {
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            border: 3px solid #000;
+            border-radius: 50%;
+            animation: coin-spin 2s linear infinite, float 6s ease-in-out infinite;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .coin:before {
+            content: '$';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            color: #000;
+        }
+        
+        .coin:hover {
+            animation: coin-spin 0.5s linear infinite, coin-bounce 0.3s ease;
+        }
+        
+        .star {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 10px solid #FFD700;
+            position: relative;
+            animation: star-twinkle 3s ease-in-out infinite, float 8s ease-in-out infinite;
+            cursor: pointer;
+        }
+        
+        .star:before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 3px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 10px solid #FFD700;
+        }
+        
+        /* Interactive Blocks */
+        .block {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #8B4513 0%, #D2691E 50%, #CD853F 100%);
+            border: 3px solid #000;
+            border-radius: 8px;
+            cursor: pointer;
+            animation: block-idle 4s ease-in-out infinite;
+            z-index: 40;
+            position: relative;
+        }
+        
+        .block:before {
+            content: '?';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 20px;
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #000;
+        }
+        
+        .block:hover {
+            animation: block-shake 0.5s ease-in-out infinite;
+            transform: scale(1.1);
+        }
+        
+        .block.hit {
+            animation: block-hit 0.5s ease;
+            background: #8B4513;
+        }
+        
+        .block.hit:before {
+            content: '';
+        }
+        
+        /* Characters */
+        .character {
+            position: absolute;
+            z-index: 60;
+            animation: character-walk 2s ease-in-out infinite;
+        }
+        
+        .character img {
+            width: 60px;
+            height: 60px;
+            image-rendering: pixelated;
+            filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.3));
+        }
+        
+        /* Power-ups */
+        .power-up {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 3px solid #000;
+            animation: power-up-float 3s ease-in-out infinite, power-up-glow 2s ease-in-out infinite alternate;
+            cursor: pointer;
+            z-index: 45;
+        }
+        
+        .mushroom {
+            background: linear-gradient(45deg, #FF0000 0%, #FF6B6B 50%, #FF0000 100%);
+            top: 35%;
+            left: 25%;
+        }
+        
+        .mushroom:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .fire-flower {
+            background: linear-gradient(45deg, #FF4500 0%, #FFD700 50%, #FF6B35 100%);
+            top: 40%;
+            right: 30%;
+        }
+        
+        /* Particle Effects */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 80;
+        }
+        
+        .sparkle {
+            animation: sparkle 1.5s ease-out forwards;
+        }
+        
+        /* Easter Eggs */
+        .hidden-enemy {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #8B0000 0%, #FF0000 50%, #8B0000 100%);
+            border-radius: 50% 50% 0 0;
+            border: 2px solid #000;
+            bottom: 10%;
+            right: 5%;
+            animation: enemy-peek 8s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 30;
+        }
+        
+        .hidden-enemy:before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 10px;
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+        }
+        
+        .hidden-enemy:after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+        }
+        
+        .mystery-box {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(45deg, #4B0082 0%, #8A2BE2 50%, #9370DB 100%);
+            border: 3px solid #000;
+            border-radius: 8px;
+            top: 60%;
+            left: 70%;
+            animation: mystery-glow 3s ease-in-out infinite alternate;
+            cursor: pointer;
+            z-index: 45;
+        }
+        
+        .mystery-box:before {
+            content: '★';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #FFD700;
+            animation: star-rotate 4s linear infinite;
+        }
+        
+        /* Animations */
+        @keyframes title-entrance {
+            0% {
+                transform: translateX(-50%) translateY(-200px) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: translateX(-50%) translateY(-50px) scale(1.2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes title-glow {
+            0% { text-shadow: 3px 3px 0 #FF6B35, 6px 6px 0 #FF0000, 9px 9px 0 #000000, 12px 12px 20px rgba(255,215,0,0.5); }
+            100% { text-shadow: 3px 3px 0 #FF6B35, 6px 6px 0 #FF0000, 9px 9px 0 #000000, 12px 12px 30px rgba(255,215,0,0.8); }
+        }
+        
+        @keyframes parallax-slow {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100px); }
+        }
+        
+        @keyframes parallax-medium {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-200px); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        @keyframes coin-spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        @keyframes coin-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        @keyframes star-twinkle {
+            0%, 100% { opacity: 1; filter: brightness(1); }
+            50% { opacity: 0.7; filter: brightness(1.5); }
+        }
+        
+        @keyframes star-rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        @keyframes block-idle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes block-shake {
+            0%, 100% { transform: translateX(0px); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        @keyframes block-hit {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+        
+        @keyframes character-walk {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(10px); }
+        }
+        
+        @keyframes power-up-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes power-up-glow {
+            0% { box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+            100% { box-shadow: 0 0 25px rgba(255,215,0,0.8); }
+        }
+        
+        @keyframes button-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes button-hit {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+        }
+        
+        @keyframes pipe-bounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes sparkle {
+            0% {
+                opacity: 1;
+                transform: translateY(0px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px) scale(0);
+            }
+        }
+        
+        @keyframes enemy-peek {
+            0%, 90%, 100% { transform: translateY(40px); }
+            5%, 15% { transform: translateY(0px); }
+        }
+        
+        @keyframes mystery-glow {
+            0% { 
+                box-shadow: 0 0 15px rgba(138,43,226,0.5);
+                transform: scale(1);
+            }
+            100% { 
+                box-shadow: 0 0 30px rgba(138,43,226,0.8);
+                transform: scale(1.1);
+            }
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .title {
+                font-size: clamp(1.5rem, 6vw, 2.5rem);
+                letter-spacing: 2px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 15px;
+                bottom: 10%;
+            }
+            
+            .game-button {
+                font-size: 0.7rem;
+                padding: 12px 20px;
+            }
+            
+            .pipe, .block, .coin, .character img {
+                transform: scale(0.8);
+            }
+            
+            .cloud1, .cloud2, .cloud3 {
+                transform: scale(0.7);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: clamp(1.2rem, 5vw, 2rem);
+                top: 15%;
+            }
+            
+            .action-buttons {
+                bottom: 8%;
+            }
+            
+            .game-button {
+                font-size: 0.6rem;
+                padding: 10px 15px;
+            }
+        }
+        
+        /* Cursor Effects */
+        .hero:hover .coin {
+            animation-duration: 1s;
+        }
+        
+        .hero:hover .star {
+            animation-duration: 1.5s;
+        }
+        
+        /* Sound Effect Indicators */
+        .sound-effect {
+            position: absolute;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #000;
+            animation: sound-pop 1s ease-out forwards;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        @keyframes sound-pop {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.5) translateY(-30px);
+            }
+        }
+@media (max-width: 600px) {
+  .hero-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mario-btn {
+    font-size: 11px;
+    padding: 4px 10px;
+    white-space: nowrap;
+    min-width: auto;
+    flex-shrink: 1;
+  }
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">LOADING PEPE BROS...</div>
+    </div>
+
+<header class="header">
+    <img src="logo.png" alt="Pepe Bros Logo" class="logo rotating-logo" id="headerLogo">
+    <nav class="nav-buttons">
+        <a href="https://x.com/OFCPepeBros" target="_blank" class="mario-btn">Twitter</a>
+        <a href="https://t.me/OFCPepeBros" target="_blank" class="mario-btn">Telegram</a>
+    </nav>
+</header>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEPE BROS - Every Buy's a Power-Up!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8E8 100%);
+        }
+        
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Camadas de fundo em parallax */
+        .bg-layer {
+            position: absolute;
+            width: 120%;
+            height: 100%;
+            background-repeat: repeat-x;
+        }
+        
+        .clouds {
+            top: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="white"><ellipse cx="50" cy="30" rx="30" ry="15"/><ellipse cx="150" cy="20" rx="25" ry="12"/></svg>') repeat-x;
+            background-size: 200px 60px;
+            animation: parallaxClouds 20s linear infinite;
+            opacity: 0.8;
+        }
+        
+        .mountains {
+            bottom: 20%;
+            height: 40%;
+            background: linear-gradient(45deg, #4a7c59 0%, #2d5016 100%);
+            clip-path: polygon(0% 100%, 15% 60%, 25% 80%, 40% 40%, 60% 70%, 80% 30%, 100% 50%, 100% 100%);
+            animation: parallaxMountains 30s linear infinite;
+        }
+        
+        .ground {
+            bottom: 0;
+            height: 20%;
+            background: linear-gradient(180deg, #8B4513 0%, #654321 100%);
+            border-top: 8px solid #2F4F2F;
+        }
+        
+        /* Animações de parallax */
+        @keyframes parallaxClouds {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-200px); }
+        }
+        
+        @keyframes parallaxMountains {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100px); }
+        }
+        
+        /* Conteúdo principal */
+        .hero-content {
+            position: relative;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Personagem principal */
+        .pepe-character {
+            width: 120px;
+            height: 120px;
+            background: url('logo.png') center/contain no-repeat;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border: 4px solid #FFD700;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .pepe-character:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(255,215,0,0.5);
+        }
+        
+        .pepe-character.jump {
+            animation: jumpAnimation 0.6s ease-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes jumpAnimation {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-50px) scale(1.2); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+        
+        /* Título principal */
+        .main-title {
+            font-size: 3.5rem;
+            color: #FFD700;
+            text-shadow: 
+                4px 4px 0px #FF4500,
+                8px 8px 0px #8B0000,
+                0 0 20px #FFD700;
+            margin-bottom: 20px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            0% { text-shadow: 4px 4px 0px #FF4500, 8px 8px 0px #8B0000, 0 0 20px #FFD700; }
+            100% { text-shadow: 4px 4px 0px #FF4500, 8px 8px 0px #8B0000, 0 0 40px #FFD700, 0 0 60px #FFD700; }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 40px;
+            animation: slideInUp 1s ease-out 0.5s both;
+        }
+        
+        @keyframes slideInUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Botões principais */
+        .cta-buttons {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .cta-button {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            border: 4px solid #FFD700;
+            font-size: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.4);
+            background: linear-gradient(45deg, #FF8C35 0%, #FFA31E 100%);
+        }
+        
+        .cta-button:active {
+            transform: translateY(-2px);
+        }
+        
+        /* Elementos interativos */
+        .interactive-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+        
+        .question-block {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #DAA520 0%, #FFD700 50%, #DAA520 100%);
+            border: 3px solid #B8860B;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            font-size: 1.2rem;
+            color: #8B4513;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            animation: blockFloat 4s ease-in-out infinite;
+        }
+        
+        .question-block:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255,215,0,0.5);
+        }
+        
+        .question-block.hit {
+            animation: blockHit 0.6s ease-out;
+        }
+        
+        @keyframes blockFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes blockHit {
+            0% { transform: translateY(0px); }
+            25% { transform: translateY(-15px) rotate(5deg); }
+            50% { transform: translateY(-10px) rotate(-5deg); }
+            75% { transform: translateY(-5px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        .coin {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #FFD700 0%, #FFA500 100%);
+            border: 2px solid #DAA520;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #8B4513;
+            animation: coinSpin 2s linear infinite, coinFloat 3s ease-in-out infinite;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
+        
+        .coin:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(255,215,0,0.8);
+        }
+        
+        @keyframes coinSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        @keyframes coinFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .coin.collected {
+            animation: coinCollect 0.8s ease-out forwards;
+        }
+        
+        @keyframes coinCollect {
+            0% { transform: scale(1) translateY(0); opacity: 1; }
+            50% { transform: scale(1.5) translateY(-30px); opacity: 0.8; }
+            100% { transform: scale(0) translateY(-60px); opacity: 0; }
+        }
+        
+        /* Posicionamento dos elementos interativos */
+        .question-block:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .question-block:nth-child(2) { top: 30%; right: 15%; animation-delay: 1s; }
+        .question-block:nth-child(3) { top: 60%; left: 20%; animation-delay: 2s; }
+        
+        .coin:nth-child(4) { top: 25%; left: 30%; animation-delay: 0.5s; }
+        .coin:nth-child(5) { top: 45%; right: 25%; animation-delay: 1.5s; }
+        .coin:nth-child(6) { top: 35%; left: 60%; animation-delay: 2.5s; }
+        .coin:nth-child(7) { top: 55%; right: 40%; animation-delay: 3s; }
+        
+        /* Efeitos especiais */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 3s ease-out forwards;
+        }
+        
+        @keyframes particleFloat {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(0); opacity: 0; }
+        }
+        
+        /* Easter egg indicator */
+        .konami-hint {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.3);
+            z-index: 200;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-button {
+                font-size: 0.9rem;
+                padding: 12px 25px;
+            }
+        }
+        
+        /* Animação especial do Konami Code */
+        .konami-active {
+            animation: rainbow 2s linear infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+@media (max-width: 600px) {
+  .hero-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mario-btn {
+    font-size: 11px;
+    padding: 4px 10px;
+    white-space: nowrap;
+    min-width: auto;
+    flex-shrink: 1;
+  }
+}
+
+
+    </style>
+</head>
+<body>
+    <section class="hero-section">
+        <!-- Camadas de fundo parallax -->
+        <div class="bg-layer clouds"></div>
+        <div class="bg-layer mountains"></div>
+        <div class="bg-layer ground"></div>
+        
+        <!-- Elementos interativos -->
+        <div class="interactive-elements">
+            <div class="question-block">?</div>
+            <div class="question-block">?</div>
+            <div class="question-block">?</div>
+            <div class="coin">₽</div>
+            <div class="coin">₽</div>
+            <div class="coin">₽</div>
+            <div class="coin">₽</div>
+        </div>
+        
+        <!-- Conteúdo principal -->
+        <div class="hero-content">
+            <div class="pepe-character" id="pepeChar"></div>
+            
+            <h1 class="main-title">BROS</h1>
+            <p class="subtitle">Every buy's a power-up. Every holder's a player.</p>
+            
+            <div class="cta-buttons">
+                <a href="#" class="cta-button" id="buyBtn">🚀 Buy Now</a>
+                <a href="#gallery" class="cta-button" id="meetBtn">👥 Meet the Bros</a>
+            </div>
+        </div>
+        
+        <div class="konami-hint">Try: ↑↑↓↓←→←→BA</div>
+    </section>
+
+    <script>
+        // Estado do jogo
+        let gameState = {
+            coinsCollected: 0,
+            blocksHit: 0,
+            konamiSequence: [],
+            konamiCode: ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA']
+        };
+
+        // Elementos
+        const pepeChar = document.getElementById('pepeChar');
+        const questionBlocks = document.querySelectorAll('.question-block');
+        const coins = document.querySelectorAll('.coin');
+        const buyBtn = document.getElementById('buyBtn');
+        const meetBtn = document.getElementById('meetBtn');
+
+        // Sons simulados (usando Web Audio API básica)
+        function playSound(frequency, duration, type = 'square') {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        // Função para criar partículas
+        function createParticles(x, y, count = 5) {
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.animationDelay = (i * 0.1) + 's';
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 3000);
+            }
+        }
+
+        // Pulo do Pepe
+        function makePepeJump() {
+            pepeChar.classList.add('jump');
+            playSound(523, 0.3); // Som de pulo (C5)
+            
+            setTimeout(() => {
+                pepeChar.classList.remove('jump');
+            }, 600);
+        }
+
+        // Eventos dos blocos de pergunta
+        questionBlocks.forEach((block, index) => {
+            block.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                block.classList.add('hit');
+                gameState.blocksHit++;
+                
+                // Som de bloco
+                playSound(800, 0.2);
+                
+                // Criar partículas
+                const rect = block.getBoundingClientRect();
+                createParticles(rect.left + rect.width/2, rect.top + rect.height/2);
+                
+                // Remover animação após completar
+                setTimeout(() => {
+                    block.classList.remove('hit');
+                }, 600);
+                
+                // Easter egg: se acertar 3 blocos, Pepe pula
+                if (gameState.blocksHit === 3) {
+                    setTimeout(makePepeJump, 300);
+                    gameState.blocksHit = 0; // Reset
+                }
+            });
+        });
+
+        // Eventos das moedas
+        coins.forEach((coin, index) => {
+            coin.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                if (coin.classList.contains('collected')) return;
+                
+                coin.classList.add('collected');
+                gameState.coinsCollected++;
+                
+                // Som de moeda
+                playSound(1047, 0.3, 'sine'); // Som de moeda (C6)
+                
+                // Criar partículas douradas
+                const rect = coin.getBoundingClientRect();
+                createParticles(rect.left + rect.width/2, rect.top + rect.height/2, 8);
+                
+                // Remover moeda após animação
+                setTimeout(() => {
+                    coin.style.display = 'none';
+                }, 800);
+                
+                // Se coletar todas as moedas, ativar modo especial
+                if (gameState.coinsCollected === coins.length) {
+                    document.body.classList.add('konami-active');
+                    playSound(523, 0.5); // Fanfare
+                    
+                    setTimeout(() => {
+                        document.body.classList.remove('konami-active');
+                        // Recriar moedas
+                        coins.forEach(coin => {
+                            coin.style.display = 'flex';
+                            coin.classList.remove('collected');
+                        });
+                        gameState.coinsCollected = 0;
+                    }, 3000);
+                }
+            });
+        });
+
+        // Clique no Pepe
+        pepeChar.addEventListener('click', makePepeJump);
+
+        // Efeitos sonoros nos botões
+        [buyBtn, meetBtn].forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                playSound(400, 0.1);
+            });
+            
+            btn.addEventListener('click', (e) => {
+                playSound(600, 0.2);
+                
+                // Efeito visual no clique
+                const rect = btn.getBoundingClientRect();
+                createParticles(rect.left + rect.width/2, rect.top + rect.height/2, 3);
+            });
+        });
+
+        // Konami Code
+        document.addEventListener('keydown', (e) => {
+            gameState.konamiSequence.push(e.code);
+            
+            // Manter apenas os últimos 10 inputs
+            if (gameState.konamiSequence.length > 10) {
+                gameState.konamiSequence.shift();
+            }
+            
+            // Verificar se o código Konami foi inserido
+            if (gameState.konamiSequence.length === 10 && 
+                gameState.konamiSequence.every((key, i) => key === gameState.konamiCode[i])) {
+                
+                // KONAMI CODE ATIVADO!
+                document.body.classList.add('konami-active');
+                
+                // Efeitos especiais
+                makePepeJump();
+                
+                // Som épico
+                playSound(523, 0.2); // C
+                setTimeout(() => playSound(659, 0.2), 200); // E
+                setTimeout(() => playSound(784, 0.2), 400); // G
+                setTimeout(() => playSound(1047, 0.5), 600); // C alta
+                
+                // Criar muitas partículas
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        createParticles(
+                            Math.random() * window.innerWidth,
+                            Math.random() * window.innerHeight,
+                            3
+                        );
+                    }, i * 100);
+                }
+                
+                // Resetar após 5 segundos
+                setTimeout(() => {
+                    document.body.classList.remove('konami-active');
+                    gameState.konamiSequence = [];
+                }, 5000);
+            }
+        });
+
+        // Animação inicial
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.main-title').style.animation += ', bounceIn 1s ease-out';
+            }, 500);
+        });
+
+        // Scroll suave para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Adicionar movimento parallax baseado no mouse
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            // Mover nuvens levemente
+            document.querySelector('.clouds').style.transform = 
+                `translateX(${-mouseX * 20}px) translateY(${-mouseY * 10}px)`;
+            
+            // Mover montanhas
+            document.querySelector('.mountains').style.transform = 
+                `translateX(${-mouseX * 15}px) translateY(${-mouseY * 5}px)`;
+        });
+    </script>
+</body>
+</html>
+
+
+    <!-- Gallery Section -->
+    <section class="section gallery-section">
+        <div class="container">
+            <h2 class="section-title">MEET THE PEPE BROS</h2>
+            <div class="gallery" id="gallery">
+                <!-- Gallery items will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="section mission-section">
+        <div class="container">
+            <h2 class="section-title">THE MISSION</h2>
+            <div class="mission-text">
+                DeFi finally got a jump button<br><br>
+Born from retro gaming. Built for degens.
+Every buy’s a power-up. Every holder’s a player.
+No fairytales. No roadmaps. Just straight-up action.<br><br>
+                🎮 Tokenomics with coin grabs, mystery blocks, and boss fights<br>
+                🔥 Burns hit. Supply drops. Price goes vertical.<br>
+                🐸 Community-driven meme ecosystem<br>
+                🚀 PulseChain speed. Zero lag. Max dopamine.<br>
+                🏆 NFT collections and gaming integrations coming soon!
+            </div>
+        </div>
+        
+        <!-- More Characters -->
+        <div class="character" style="top: 20%; left: 5%;">
+            <img src="3.png" alt="Character 3" onerror="this.style.display='none'">
+        </div>
+        <div class="character" style="bottom: 10%; right: 10%;">
+            <img src="4.png" alt="Character 4" onerror="this.style.display='none'">
+        </div>
+    </section>
+
+    <!-- How to Buy Section -->
+    <section class="section buy-section">
+        <div class="container">
+            <h2 class="section-title">HOW TO BUY</h2>
+            <div class="buy-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>GET METAMASK</h3>
+                    <p>Download and install MetaMask wallet. Add PulseChain network to your wallet.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>GET PLS</h3>
+                    <p>Buy PLS (PulseChain native token) and send it to your MetaMask wallet.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>VISIT PUMP TIRES</h3>
+                    <p>Go to the Pump Tires launchpad and connect your MetaMask wallet.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>SWAP FOR PEPE BROS</h3>
+                    <p>Enter the amount of PLS you want to swap for PEPE BROS tokens and confirm!</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 50px;">
+                <img src="logo pls.png" alt="PulseChain" style="width: 100px; height: auto;" onerror="this.style.display='none'">
+                <p style="margin-top: 20px; font-size: 1.2rem;">Powered by PulseChain ⚡</p>
+            </div>
+        </div>
+        
+        <!-- More Characters -->
+        <div class="character" style="top: 15%; right: 5%;">
+            <img src="5.png" alt="Character 5" onerror="this.style.display='none'">
+        </div>
+        <div class="character" style="bottom: 20%; left: 8%;">
+            <img src="6.png" alt="Character 6" onerror="this.style.display='none'">
+        </div>
+    </section>
+
+    <!-- Animation Section -->
+    <section class="section animation-section">
+        <div class="container">
+            <h2 class="section-title">PEPE BROS IN ACTION</h2>
+            <div class="gif-container">
+                <img src="gif1.gif" alt="Pepe Bros Animation" onerror="this.style.display='none'">
+            </div>
+            <p style="margin-top: 30px; font-size: 1.2rem; color: #333;">
+                Watch the Bros in their natural habitat! 🎮
+            </p>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <h3>JOIN THE ADVENTURE</h3>
+            <p style="margin: 20px 0;">Ready to jump into the DeFi world with the Pepe Bros?</p>
+            <div style="display: flex; justify-content: center; align-items: center; margin: 30px 0;">
+                <img src="logo.png" alt="Pepe Bros" class="footer-logo" onerror="this.style.display='none'">
+                <span style="font-size: 2rem; margin: 0 20px;">X</span>
+                <img src="logo pls.png" alt="PulseChain" class="footer-logo" onerror="this.style.display='none'">
+            </div>
+            <p>&copy; 2025 PEPE BROS. All rights reserved. Built with 💚 on PulseChain.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Game state
+        let score = 0;
+        let powerUpCount = 0;
+        
+        // Sound effects (using Web Audio API for retro sounds)
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(frequency, duration, type = 'sine') {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                gsap.to('#loadingScreen', {
+                    opacity: 0,
+                    duration: 1,
+                    onComplete: () => {
+                        document.getElementById('loadingScreen').style.display = 'none';
+                        initAnimations();
+                    }
+                });
+            }, 2000);
+        });
+        
+        // Block hit function
+        function hitBlock(block) {
+            playSound(800, 0.1, 'square');
+            block.classList.add('hit');
+            
+            // Create coin effect
+            const coin = document.createElement('div');
+            coin.className = 'coin floating-element';
+            coin.style.position = 'absolute';
+            coin.style.left = block.style.left;
+            coin.style.top = block.style.top;
+            coin.style.zIndex = '1000';
+            document.body.appendChild(coin);
+            
+            gsap.to(coin, {
+                y: -100,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out",
+                onComplete: () => {
+                    coin.remove();
+                    showPowerUp("+100 COINS!", block.getBoundingClientRect().left, block.getBoundingClientRect().top);
+                }
+            });
+            
+            setTimeout(() => {
+                block.classList.remove('hit');
+            }, 500);
+            
+            score += 100;
+        }
+        
+        // Show power-up text
+        function showPowerUp(text, x, y) {
+            const powerUp = document.createElement('div');
+            powerUp.className = 'power-up';
+            powerUp.textContent = text;
+            powerUp.style.left = x + 'px';
+            powerUp.style.top = y + 'px';
+            document.body.appendChild(powerUp);
+            
+            setTimeout(() => {
+                powerUp.remove();
+            }, 2000);
+            
+            powerUpCount++;
+        }
+        
+        // Mouse parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            // Move floating elements
+            const floatingElements = document.querySelectorAll('.floating-element');
+            floatingElements.forEach((element, index) => {
+                const speed = (index % 3 + 1) * 0.02;
+                const x = (mouseX - 0.5) * 100 * speed;
+                const y = (mouseY - 0.5) * 100 * speed;
+                
+                gsap.to(element, {
+                    x: x,
+                    y: y,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            });
+            
+            // Move characters
+            const characters = document.querySelectorAll('.character');
+            characters.forEach((character, index) => {
+                const speed = (index % 2 + 1) * 0.01;
+                const x = (mouseX - 0.5) * 50 * speed;
+                const y = (mouseY - 0.5) * 50 * speed;
+                
+                gsap.to(character, {
+                    x: x,
+                    y: y,
+                    duration: 1.5,
+                    ease: "power2.out"
+                });
+            });
+        });
+        
+        // Initialize animations
+        function initAnimations() {
+            // Header logo animation
+            gsap.to('#headerLogo', {
+                rotation: 360,
+                duration: 10,
+                repeat: -1,
+                ease: "none"
+            });
+            
+            // Title entrance animation
+            gsap.fromTo('#mainTitle', {
+                scale: 0,
+                rotation: -180,
+                opacity: 0
+            }, {
+                scale: 1,
+                rotation: 0,
+                opacity: 1,
+                duration: 2,
+                ease: "bounce.out"
+            });
+            
+            // Section animations
+            gsap.utils.toArray('.section').forEach((section, index) => {
+                gsap.fromTo(section.querySelector('.section-title'), {
+                    y: 100,
+                    opacity: 0,
+                    scale: 0.5
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    ease: "back.out(1.7)",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 80%",
+                        end: "bottom 20%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            });
+            
+            // Character animations
+            gsap.utils.toArray('.character').forEach((character, index) => {
+                gsap.fromTo(character, {
+                    x: index % 2 === 0 ? -200 : 200,
+                    opacity: 0,
+                    rotation: index % 2 === 0 ? -45 : 45
+                }, {
+                    x: 0,
+                    opacity: 1,
+                    rotation: 0,
+                    duration: 1.5,
+                    ease: "back.out(1.7)",
+                    scrollTrigger: {
+                        trigger: character,
+                        start: "top 90%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+                
+                // Continuous floating animation
+                gsap.to(character, {
+                    y: -20,
+                    duration: 2 + Math.random(),
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: Math.random() * 2
+                });
+            });
+            
+            // Steps animation
+            gsap.utils.toArray('.step').forEach((step, index) => {
+                gsap.fromTo(step, {
+                    y: 50,
+                    opacity: 0,
+                    scale: 0.8
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.8,
+                    ease: "back.out(1.7)",
+                    delay: index * 0.2,
+                    scrollTrigger: {
+                        trigger: step,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            });
+            
+            // Gallery population and animation
+            populateGallery();
+            
+            // Coins continuous animation
+            gsap.utils.toArray('.coin').forEach((coin, index) => {
+                gsap.to(coin, {
+                    rotation: 360,
+                    duration: 2,
+                    repeat: -1,
+                    ease: "none"
+                });
+                
+                gsap.to(coin, {
+                    scale: 1.2,
+                    duration: 1,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: index * 0.3
+                });
+            });
+            
+            // Blocks hover effects
+            gsap.utils.toArray('.block').forEach(block => {
+                block.addEventListener('mouseenter', () => {
+                    gsap.to(block, {
+                        scale: 1.1,
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+                        duration: 0.3
+                    });
+                });
+                
+                block.addEventListener('mouseleave', () => {
+                    gsap.to(block, {
+                        scale: 1,
+                        boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+                        duration: 0.3
+                    });
+                });
+            });
+            
+            // Scroll-triggered parallax for hero background
+            gsap.to('.hero', {
+                backgroundPosition: "50% 100%",
+                ease: "none",
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        }
+        
+        // Populate gallery with character images
+        function populateGallery() {
+            const gallery = document.getElementById('gallery');
+            
+            for (let i = 1; i <= 15; i++) {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.innerHTML = `<img src="${i}.png" alt="Character ${i}" onerror="this.parentElement.style.display='none'">`;
+                
+                // Add click event for gallery items
+                galleryItem.addEventListener('click', () => {
+                    playSound(600 + (i * 50), 0.2, 'triangle');
+                    
+                    // Character interaction effect
+                    gsap.to(galleryItem, {
+                        scale: 1.3,
+                        rotation: 360,
+                        duration: 0.5,
+                        ease: "back.out(1.7)",
+                        yoyo: true,
+                        repeat: 1
+                    });
+                    
+                    showPowerUp("PEPE POWER!", 
+                        galleryItem.getBoundingClientRect().left + galleryItem.offsetWidth/2, 
+                        galleryItem.getBoundingClientRect().top);
+                });
+                
+                gallery.appendChild(galleryItem);
+                
+                // Stagger animation for gallery items
+                gsap.fromTo(galleryItem, {
+                    y: 100,
+                    opacity: 0,
+                    scale: 0.5,
+                    rotation: -45
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    scale: 1,
+                    rotation: 0,
+                    duration: 0.8,
+                    ease: "back.out(1.7)",
+                    delay: i * 0.1,
+                    scrollTrigger: {
+                        trigger: gallery,
+                        start: "top 80%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            }
+        }
+        
+        // Easter egg: Konami Code
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.code);
+            
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            
+            if (JSON.stringify(konamiCode) === JSON.stringify(konamiSequence)) {
+                // Konami code activated!
+                playSound(1200, 0.5, 'sawtooth');
+                
+                // Special effect
+                const body = document.body;
+                body.style.background = 'linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ffff00)';
+                body.style.backgroundSize = '400% 400%';
+                body.style.animation = 'gradientShift 0.5s ease infinite';
+                
+                showPowerUp("🎮 KONAMI CODE ACTIVATED! 🎮", window.innerWidth/2, window.innerHeight/2);
+                showPowerUp("30 LIVES UNLOCKED!", window.innerWidth/2, window.innerHeight/2 + 50);
+                
+                // Reset after 3 seconds
+                setTimeout(() => {
+                    body.style.background = '';
+                    body.style.animation = '';
+                }, 3000);
+                
+                konamiCode = [];
+            }
+        });
+        
+        // Character click interactions
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.character')) {
+                const character = e.target.closest('.character');
+                playSound(400 + Math.random() * 400, 0.3, 'triangle');
+                
+                // Jump animation
+                gsap.to(character, {
+                    y: -50,
+                    duration: 0.3,
+                    ease: "power2.out",
+                    yoyo: true,
+                    repeat: 1
+                });
+                
+                // Create particle effect
+                createParticles(e.clientX, e.clientY);
+            }
+        });
+        
+        // Particle system for special effects
+        function createParticles(x, y) {
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = '6px';
+                particle.style.height = '6px';
+                particle.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '9999';
+                document.body.appendChild(particle);
+                
+                const angle = (Math.PI * 2 * i) / 10;
+                const velocity = 50 + Math.random() * 50;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                gsap.to(particle, {
+                    x: vx,
+                    y: vy,
+                    opacity: 0,
+                    scale: 0,
+                    duration: 1,
+                    ease: "power2.out",
+                    onComplete: () => particle.remove()
+                });
+            }
+        }
+        
+        // Auto-scroll hint for mobile users
+        let scrollHintShown = false;
+        window.addEventListener('scroll', () => {
+            if (!scrollHintShown && window.scrollY > 100) {
+                scrollHintShown = true;
+                showPowerUp("🎮 SCROLL TO EXPLORE! 🎮", window.innerWidth/2, 100);
+            }
+        });
+        
+        // Dynamic background elements
+        function createFloatingElement() {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            
+            const types = ['coin', 'block', 'star'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            
+            if (type === 'coin') {
+                element.classList.add('coin');
+            } else if (type === 'star') {
+                element.style.width = '20px';
+                element.style.height = '20px';
+                element.style.background = 'linear-gradient(45deg, #FFD700, #FFA500)';
+                element.style.clipPath = 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)';
+            }
+            
+            element.style.left = Math.random() * window.innerWidth + 'px';
+            element.style.top = '-50px';
+            document.body.appendChild(element);
+            
+            gsap.to(element, {
+                y: window.innerHeight + 100,
+                x: (Math.random() - 0.5) * 200,
+                rotation: 360,
+                duration: 8 + Math.random() * 4,
+                ease: "none",
+                onComplete: () => element.remove()
+            });
+        }
+        
+        // Periodically create floating elements
+        setInterval(createFloatingElement, 5000);
+        
+        // Responsive adjustments
+        function adjustForMobile() {
+            if (window.innerWidth <= 768) {
+                // Reduce particle count on mobile
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.character')) {
+                        // Mobile-optimized particle count
+                        for (let i = 0; i < 5; i++) {
+                            // Simplified particles for performance
+                        }
+                    }
+                });
+                
+                // Reduce floating elements frequency on mobile
+                setInterval(createFloatingElement, 10000);
+            }
+        }
+        
+        // Initialize mobile adjustments
+        adjustForMobile();
+        window.addEventListener('resize', adjustForMobile);
+        
+        // Performance optimization: Pause animations when page is not visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                gsap.globalTimeline.pause();
+            } else {
+                gsap.globalTimeline.resume();
+            }
+        });
+        
+        // Score display (Easter egg)
+        let scoreDisplayed = false;
+        setTimeout(() => {
+            if (score > 0 && !scoreDisplayed) {
+                scoreDisplayed = true;
+                const scoreElement = document.createElement('div');
+                scoreElement.style.position = 'fixed';
+                scoreElement.style.top = '20px';
+                scoreElement.style.right = '20px';
+                scoreElement.style.color = '#FFD700';
+                scoreElement.style.fontSize = '1.5rem';
+                scoreElement.style.textShadow = '2px 2px 0px #000';
+                scoreElement.style.zIndex = '9999';
+                scoreElement.textContent = `SCORE: ${score}`;
+                document.body.appendChild(scoreElement);
+                
+                gsap.fromTo(scoreElement, {
+                    scale: 0,
+                    opacity: 0
+                }, {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 0.5,
+                    ease: "back.out(1.7)"
+                });
+            }
+        }, 30000); // Show score after 30 seconds of interaction
+        
+        // Final touch: Add some magic sparkles
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.style.position = 'fixed';
+            sparkle.style.width = '4px';
+            sparkle.style.height = '4px';
+            sparkle.style.background = '#fff';
+            sparkle.style.borderRadius = '50%';
+            sparkle.style.pointerEvents = 'none';
+            sparkle.style.zIndex = '9998';
+            sparkle.style.boxShadow = '0 0 10px #fff';
+            sparkle.style.left = Math.random() * window.innerWidth + 'px';
+            sparkle.style.top = Math.random() * window.innerHeight + 'px';
+            document.body.appendChild(sparkle);
+            
+            gsap.to(sparkle, {
+                scale: 2,
+                opacity: 0,
+                duration: 2,
+                ease: "power2.out",
+                onComplete: () => sparkle.remove()
+            });
+        }
+        
+        // Create sparkles periodically
+        setInterval(createSparkle, 3000);
+        
+        console.log("🎮 PEPE BROS WEBSITE LOADED! 🎮");
+        console.log("Try the Konami Code: ↑↑↓↓←→←→BA");
+        console.log("Click on characters and blocks for surprises!");
+    </script>
+</body>
+</html>
